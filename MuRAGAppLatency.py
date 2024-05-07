@@ -210,11 +210,10 @@ if uploaded_file is not None:
     def image_summarize(img_base64, prompt):
       """Make image summary"""
       if immage_sum_model == 'gpt-4-vision-preview':
-        model = ChatOpenAI(
-          temperature=0, model=immage_sum_model, openai_api_key = openai.api_key, max_tokens=1024)
+          model = ChatOpenAI(temperature=0, model=immage_sum_model, openai_api_key = openai.api_key, max_tokens=1024)
       else:
         #model = ChatGoogleGenerativeAI(model="gemini-pro-vision", max_output_tokens=1024)
-        model = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", max_output_tokens=1024)
+          model = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", max_output_tokens=1024)
     
       msg = model(
           [
