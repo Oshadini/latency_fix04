@@ -214,7 +214,7 @@ if uploaded_file is not None:
             return base64.b64encode(image_file.read()).decode("utf-8")
     st.cache_data
     def image_summarize(img_base64, prompt):
-      """Make image summary"""
+        """Make image summary"""
         if immage_sum_model == 'gpt-4-vision-preview':
             model = ChatOpenAI(temperature=0, model=immage_sum_model, openai_api_key = openai.api_key, max_tokens=1024)
         else:
