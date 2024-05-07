@@ -93,18 +93,24 @@ if uploaded_file is not None:
         file.write(uploaded_file.getvalue())
 
     image_path = "./"
-    pdf_elements = partition_pdf(
-        temp_file,
-        chunking_strategy="by_title",
-        #chunking_strategy="basic",
-        extract_images_in_pdf=True,
-        infer_table_structure=True,
-        max_characters=3000,
-        new_after_n_chars=2800,
-        combine_text_under_n_chars=2000,
-        image_output_dir_path=image_path
-    )
 
+    st.cache_data
+    def partition(temp_file_path,image_path):
+        pdf_elements = partition_pdf(
+            temp_file_path,
+            chunking_strategy="by_title",
+            #chunking_strategy="basic",
+            extract_images_in_pdf=True,
+            infer_table_structure=True,
+            max_characters=3000,
+            new_after_n_chars=2800,
+            combine_text_under_n_chars=2000,
+            image_output_dir_path=image_path
+        )
+        return pdf_elements
+
+    pdf_elements = partition(temp_file,image_path)
+    
     # Categorize elements by type
     def categorize_elements(_raw_pdf_elements):
       """
@@ -136,7 +142,7 @@ if uploaded_file is not None:
     st.write(f"{bullet_point} \t\tCategorize elements completed")  
 
     # Generate summaries of text elements
-    st.cache_data()
+    st.cache_data
     def generate_text_summaries(texts, tables, summarize_texts=False):
       """
       Summarize text elements
@@ -204,16 +210,16 @@ if uploaded_file is not None:
     
     def encode_image(image_path):
       """Getting the base64 string"""
-      with open(image_path, "rb") as image_file:
-          return base64.b64encode(image_file.read()).decode("utf-8")
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode("utf-8")
     st.cache_data
     def image_summarize(img_base64, prompt):
       """Make image summary"""
-      if immage_sum_model == 'gpt-4-vision-preview':
-          model = ChatOpenAI(temperature=0, model=immage_sum_model, openai_api_key = openai.api_key, max_tokens=1024)
-      else:
-        #model = ChatGoogleGenerativeAI(model="gemini-pro-vision", max_output_tokens=1024)
-          model = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", max_output_tokens=1024)
+        if immage_sum_model == 'gpt-4-vision-preview':
+            model = ChatOpenAI(temperature=0, model=immage_sum_model, openai_api_key = openai.api_key, max_tokens=1024)
+        else:
+            #model = ChatGoogleGenerativeAI(model="gemini-pro-vision", max_output_tokens=1024)
+            model = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", max_output_tokens=1024)
     
       msg = model(
           [
