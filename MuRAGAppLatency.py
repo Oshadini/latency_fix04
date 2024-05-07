@@ -136,6 +136,7 @@ if uploaded_file is not None:
     st.write(f"{bullet_point} \t\tCategorize elements completed")  
 
     # Generate summaries of text elements
+    st.cache_data()
     def generate_text_summaries(texts, tables, summarize_texts=False):
       """
       Summarize text elements
@@ -151,9 +152,7 @@ if uploaded_file is not None:
       or text: {element} """
 
       prompt = PromptTemplate.from_template(prompt_text)
-      empty_response = RunnableLambda(
-          lambda x: AIMessage(content="Error processing document")
-      )
+
       # Text summary chain
 
       if time_hist_color == 'gpt-4-turbo':
