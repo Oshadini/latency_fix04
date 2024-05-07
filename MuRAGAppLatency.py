@@ -94,7 +94,7 @@ if uploaded_file is not None:
 
     image_path = "./"
 
-    st.cache_data()
+    st.cache_data
     def partition(temp_file_path,image_path):
         pdf_elements = partition_pdf(
             temp_file_path,
@@ -142,7 +142,7 @@ if uploaded_file is not None:
     st.write(f"{bullet_point} \t\tCategorize elements completed")  
 
     # Generate summaries of text elements
-    st.cache_data()
+    st.cache_data
     def generate_text_summaries(texts, tables, summarize_texts=False):
       """
       Summarize text elements
@@ -211,7 +211,7 @@ if uploaded_file is not None:
             return base64.b64encode(image_file.read()).decode("utf-8")
 
     
-    st.cache_data()
+    st.cache_data
     def image_summarize(img_base64, prompt):
       """Make image summary"""
       if immage_sum_model == 'gpt-4-vision-preview':
