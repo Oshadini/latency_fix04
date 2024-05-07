@@ -186,7 +186,6 @@ if uploaded_file is not None:
         
     st.title("Summary generation process:-")
     st.write(f"{bullet_point} Summary generation process started")
-    text_summaries, table_summaries = generate_text_summaries(texts, tables, summarize_texts=True)
     
     if "text_summaries" not in st.session_state or "table_summaries" not in st.session_state:
         # Create session state variables
