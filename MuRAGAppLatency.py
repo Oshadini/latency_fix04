@@ -213,7 +213,7 @@ if uploaded_file is not None:
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode("utf-8")
     st.cache_data()
-    def image_summarize(img_base64, prompt):
+    def image_summarize(img_base64):
     
         """Make image summary"""  
         prompt = [   
@@ -253,7 +253,7 @@ if uploaded_file is not None:
                   img_path = os.path.join('./figures', img_file)
                   base64_image = encode_image(img_path)
                   img_base64_list.append(base64_image)
-                  image_summaries.append(image_summarize(base64_image, prompt))
+                  image_summaries.append(image_summarize(base64_image))
         st.session_state["img_base64_list"] = img_base64_list
         st.session_state["image_summaries"] = image_summaries
     else:
