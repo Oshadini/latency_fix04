@@ -73,7 +73,7 @@ generation_model = st.sidebar.selectbox('Select data', ('gpt-4-vision-preview', 
 
 #st.sidebar.subheader('Line chart parameters')
 #plot_data = st.sidebar.multiselect('Select data', ['temp_min', 'temp_max'], ['temp_min', 'temp_max'])
-max_concurrecy = st.sidebar.slider('Maximum Concurrency', 3, 4, 5)
+max_concurrecy = st.sidebar.slider('Maximum Concurrency', 3, 4, 7)
 
 st.sidebar.markdown('''
 ---
@@ -163,7 +163,7 @@ if uploaded_file is not None:
       else:
         model = ChatGoogleGenerativeAI(
             #temperature=0, model="gemini-pro", max_output_tokens=1024
-            temperature=0, model="gemini-1.5-pro-latest", max_output_tokens=1024
+          temperature=0, model="gemini-1.5-pro-latest", max_output_tokens=1024
         )
 
       summarize_chain = {"element": lambda x: x} | prompt | model | StrOutputParser()
