@@ -221,7 +221,7 @@ if uploaded_file is not None:
             #model = ChatGoogleGenerativeAI(model="gemini-pro-vision", max_output_tokens=1024)
             model = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", max_output_tokens=1024)
     
-      msg = model(
+        msg = model(
           [
               HumanMessage(
                   content=[
@@ -233,8 +233,8 @@ if uploaded_file is not None:
                   ]
               )
           ]
-      )
-      return msg.content
+        )
+        return msg.content
     
     
     # Store base64 encoded images
