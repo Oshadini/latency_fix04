@@ -205,22 +205,25 @@ if uploaded_file is not None:
     st.write(f"{bullet_point} \t\tText & Table summaries generation completed")  
                                                                                             
     
-    
-
-    
     def encode_image(image_path):
         """Getting the base64 string"""
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode("utf-8")
-    st.cache_data()
-    def image_summarize(img_base64):
+
     
-        """Make image summary"""  
-        prompt = [   
-            SystemMessage(content="You are an assistant tasked with summarizing images for retrieval. \
-                    These summaries will be embedded and used to retrieve the raw image. \
-                    Give a concise summary of the image that is well optimized for retrieval."),                                                   
-            HumanMessage(
+    st.cache_data()
+    def image_summarize(img_base64, prompt):
+      """Make image summary"""
+      if immage_sum_model == 'gpt-4-vision-preview':
+        model = ChatOpenAI(
+          temperature=0, model=immage_sum_model, openai_api_key = openai.api_key, max_tokens=1024)
+      else:
+        #model = ChatGoogleGenerativeAI(model="gemini-pro-vision", max_output_tokens=1024)
+        model = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", max_output_tokens=1024)
+    
+      msg = model(
+          [
+              HumanMessage(
                   content=[
                       {"type": "text", "text": prompt},
                       {
@@ -230,11 +233,8 @@ if uploaded_file is not None:
                   ]
               )
           ]
-        if immage_sum_model == 'gpt-4-vision-preview':
-            response = ChatOpenAI(temperature=0, model=immage_sum_model, openai_api_key = openai.api_key, max_tokens=1024).invoke(prompt)
-        else:
-            response = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", max_output_tokens=1024)
-        return response.content
+      )
+      return msg.content
     
     
     # Store base64 encoded images
@@ -243,7 +243,10 @@ if uploaded_file is not None:
     # Store image summaries
     image_summaries = []
     
-
+    # Prompt
+    prompt = """You are an assistant tasked with summarizing images for retrieval. \
+    These summaries will be embedded and used to retrieve the raw image. \
+    Give a concise summary of the image that is well optimized for retrieval."""
     
     if 'image_elements' not in st.session_state:
         with st.spinner("Generating Images summaries......"):
@@ -253,7 +256,7 @@ if uploaded_file is not None:
                   img_path = os.path.join('./figures', img_file)
                   base64_image = encode_image(img_path)
                   img_base64_list.append(base64_image)
-                  image_summaries.append(image_summarize(base64_image))
+                  image_summaries.append(image_summarize(base64_image, prompt))
         st.session_state["img_base64_list"] = img_base64_list
         st.session_state["image_summaries"] = image_summaries
     else:
@@ -261,7 +264,7 @@ if uploaded_file is not None:
         image_summaries = st.session_state["image_summaries"]  
     
     st.write(f"{bullet_point} \t\tImage summaries generation completed") 
-    st.write(f"{bullet_point} Summary generation process completed")  
+    st.write(f"{bullet_point} Summary generation process completed")
     
     
     def create_multi_vector_retriever(
